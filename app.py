@@ -310,12 +310,116 @@ with tab1:
 # =====================================================
 with tab2:
 
-    st.header("How to interpret")
+    st.header("How to interpret this simulator")
 
     st.markdown("""
-If NPV(Buy) > NPV(Rent) → Buy  
-If NPV(Rent) > NPV(Buy) → Rent  
+## 🎯 Core decision rule
+**If NPV(Buy) > NPV(Rent) → Buying builds more wealth**  
+**If NPV(Rent) > NPV(Buy) → Renting is financially better**
 
-Buying is a leveraged bet on house prices.  
-Tax benefits help but rarely decide alone.
+This model compares *total lifetime financial impact* of buying vs renting.
+
+It includes:
+- Down payment
+- EMI
+- Maintenance
+- Opportunity cost of capital
+- House price growth
+- Rent growth
+- Tax benefits (India)
+
+---
+
+## 🧠 Big financial insight
+Buying a house is essentially a:
+
+> **leveraged investment in real estate**
+
+You are borrowing a large amount and betting on house price growth.
+
+If prices grow fast → buying wins  
+If prices stagnate → renting wins  
+
+---
+
+## ⏱ Why tenure matters so much
+Buying has large upfront costs:
+- Stamp duty  
+- Registration  
+- Brokerage  
+- Moving costs  
+
+So:
+
+**Short stay → renting better**  
+**Long stay → buying better**
+
+The break-even tenure chart shows  
+how long you must stay before buying makes sense.
+
+In India this is often:
+**7–12 years**
+
+---
+
+## 📈 Why growth assumptions matter
+Most households assume:
+> “Property always goes up.”
+
+But the simulator shows:
+
+If growth is below break-even → renting wins  
+If growth is above break-even → buying wins  
+
+Even a 1% change in growth can flip the decision.
+
+---
+
+## 💸 Role of tax benefits (India)
+Home-loan deductions:
+- Section 24: interest deduction  
+- 80C: principal deduction  
+
+These **reduce effective EMI**.
+
+But in most realistic cases:
+> Tax benefits alone do NOT justify buying.
+
+They only slightly shift the break-even point.
+
+---
+
+## 🧪 What students should experiment with
+Try changing:
+
+• Stay duration  
+• Interest rate  
+• Growth rate  
+• Rent growth  
+• Turn tax ON/OFF  
+• Toggle lifetime hold  
+
+Watch how quickly the decision flips.
+
+---
+
+## 🏫 Classroom discussion questions
+1. Why do short-term buyers lose money?
+2. What growth rate is implicit in buying?
+3. Does tax policy meaningfully change decisions?
+4. Is buying consumption or investment?
+5. Should young professionals rent longer?
+
+---
+
+## 💡 Key takeaway
+Most households:
+- underestimate opportunity cost
+- overestimate price growth
+- ignore tenure risk
+
+This simulator shows that:
+
+> **Buying is not always financially optimal.**
 """)
+
