@@ -305,6 +305,47 @@ with tab1:
         st.metric("NPV without tax benefits", f"{b0:,.0f}")
         st.metric("Tax benefit value", f"{b1-b0:,.0f}")
 
+    # =====================================================
+    # MONTE CARLO SIMULATION
+    # =====================================================
+    st.subheader("Monte Carlo simulation")
+    
+    if st.button("Run Monte Carlo"):
+    
+        sims = 500
+        results = []
+    
+        # correlation between rent & house growth
+        cov = [[1,0.4],[0.4,1]]
+        means = [house_growth, rent_growth]
+    
+        for _ in range(sims):
+            hg, rg = np.random.multivariate_normal(means, cov)
+            b, rn = compute_npv(hg, rg, use_tax)
+            results.append(b - rn)
+    
+        prob = np.mean(np.array(results) > 0)
+    
+        st.metric("Probability buying wins", f"{prob:.2%}")
+    
+        fig_mc = go.Figure()
+        fig_mc.add_histogram(x=results, nbinsx=40)
+    
+        fig_mc.update_layout(
+            height=500,
+            template="simple_white",
+            font=dict(size=18),
+            xaxis_title="NPV difference (Buy − Rent)",
+            yaxis_title="Frequency"
+        )
+    
+        st.plotly_chart(fig_mc, use_container_width=True)
+    
+        st.info(
+            "This simulation draws random house-price and rent growth paths. "
+            "The probability shown is how often buying beats renting under uncertainty."
+        )
+
 # =====================================================
 # STUDENT GUIDE
 # =====================================================
