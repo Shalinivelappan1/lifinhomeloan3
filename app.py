@@ -228,18 +228,82 @@ with tab1:
     )
 
     st.plotly_chart(fig, use_container_width=True)
-
     # =====================================================
-    # TAX COMPARISON
+    # BREAK-EVEN TENURE (AUTO LABEL)
     # =====================================================
-    st.subheader("Impact of tax benefits")
-
-    b1,_ = compute_npv(house_growth, rent_growth, True)
-    b0,_ = compute_npv(house_growth, rent_growth, False)
-
-    st.metric("NPV with tax benefits", f"{b1:,.0f}")
-    st.metric("NPV without tax benefits", f"{b0:,.0f}")
-    st.metric("Tax benefit value", f"{b1-b0:,.0f}")
+    st.subheader("Break-even holding period")
+    
+    years = np.arange(1,31)
+    tenure_diffs = []
+    
+    for y in years:
+        old_exit = exit_year
+        exit_year = y
+        b,rn = compute_npv(house_growth, rent_growth, use_tax)
+        tenure_diffs.append(b-rn)
+        exit_year = old_exit
+    
+    fig_t = go.Figure()
+    
+    fig_t.add_scatter(
+        x=years,
+        y=tenure_diffs,
+        mode="lines",
+        line=dict(width=5, color="green"),
+        name="Buy advantage"
+    )
+    
+    fig_t.add_hline(y=0, line_width=4, line_color="black")
+    
+    # ---- find break-even tenure
+    tenure_be = None
+    for i in range(len(tenure_diffs)-1):
+        if tenure_diffs[i] * tenure_diffs[i+1] < 0:
+            tenure_be = years[i]
+            break
+    
+    if tenure_be is not None:
+        fig_t.add_vline(
+            x=tenure_be,
+            line_dash="dash",
+            line_color="red",
+            line_width=3
+        )
+    
+        fig_t.add_annotation(
+            x=tenure_be,
+            y=max(tenure_diffs)*0.8,
+            text=f"Break-even ≈ {tenure_be} yrs",
+            showarrow=True,
+            font=dict(size=20, color="red")
+        )
+    
+    fig_t.update_layout(
+        height=620,
+        template="simple_white",
+        font=dict(size=20),
+        xaxis_title="Years staying in house",
+        yaxis_title="NPV difference (Buy − Rent)"
+    )
+    
+    st.plotly_chart(fig_t, use_container_width=True)
+    
+    if tenure_be:
+        st.success(
+            f"Buying becomes financially better only if you stay longer than about {tenure_be} years."
+        )
+    
+        # =====================================================
+        # TAX COMPARISON
+        # =====================================================
+        st.subheader("Impact of tax benefits")
+    
+        b1,_ = compute_npv(house_growth, rent_growth, True)
+        b0,_ = compute_npv(house_growth, rent_growth, False)
+    
+        st.metric("NPV with tax benefits", f"{b1:,.0f}")
+        st.metric("NPV without tax benefits", f"{b0:,.0f}")
+        st.metric("Tax benefit value", f"{b1-b0:,.0f}")
 
 # =====================================================
 # STUDENT GUIDE
